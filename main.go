@@ -2,29 +2,60 @@ package main
 
 import (
 	"context"
-	"github.com/ivansukach/http-server/protocol"
+	"github.com/dgrijalva/jwt-go"
 	"github.com/labstack/echo"
+	"github.com/leshachaplin/grpc-server/protocol"
 	"google.golang.org/grpc"
 	"log"
+	"net/http"
 )
 
-var client protocol.GetResponseClient
+var client protocol.AuthServiceClient
 
-func pingPong(c echo.Context) error {
-	user := c.Param("user")
-	log.Println(user)
-	request := &protocol.GRRequest{Req: "Ping"}
+func signIn(c echo.Context) (err error) {
+	user := new(UserModel)
+	if err = c.Bind(user); err != nil { //The default binder supports decoding application/json,
+		// application/xml and application/x-www-form-urlencoded data based on the Content-Type header.
+		return
+	}
 
-	response, err := client.GiveResponse(context.Background(), request) // Package context in Golang allows you to send data in your program in some «context».
-	// Package context allows us to exchange data and includes anything you need to provide this
+	requestAuth := &protocol.SignInRequest{Login: user.Username, Password: user.Password}
+	responseAuth, err := client.SignIn(context.Background(), requestAuth)
+	if err != nil {
+		log.Fatal(err)
+		return echo.ErrUnauthorized
+	}
+	token := responseAuth.GetToken()
+
+	return c.JSON(http.StatusOK, map[string]string{
+		"token": token,
+	})
+}
+func signUp(c echo.Context) (err error) {
+	user := new(UserModel)
+	if err = c.Bind(user); err != nil { //The default binder supports decoding application/json,
+		// application/xml and application/x-www-form-urlencoded data based on the Content-Type header.
+		return
+	}
+
+	requestRegistration := &protocol.SignInRequest{Login: user.Username, Password: user.Password}
+	responseRegistration, err := client.SignIn(context.Background(), requestRegistration)
 	if err != nil {
 		log.Fatal(err)
 	}
-	log.Println("Ответ сервера:", "Let's play "+response.GetRes()+", "+user)
-	str := "Let's play " + response.GetRes() + ", " + user
-	c.Response().Writer.Write([]byte(str))
-	return nil
+	token := responseRegistration.GetToken()
+
+	return c.JSON(http.StatusOK, map[string]string{
+		"token": token,
+	})
 }
+func restricted(c echo.Context) error {
+	token := c.Get("token").(*jwt.Token)
+	claims := user.Claims.(jwt.MapClaims)
+	name := claims["name"].(string)
+	return c.String(http.StatusOK, "Welcome "+name+"!")
+}
+
 func main() {
 	log.Println("Клиент запущен ...")
 	opts := grpc.WithInsecure() //WithInsecure returns a DialOption which disables transport security for this ClientConn.
@@ -34,8 +65,10 @@ func main() {
 		log.Fatal(err)
 	}
 	defer clientConnInterface.Close() //A defer statement defers the execution of a function until the surrounding function returns.
-	client = protocol.NewGetResponseClient(clientConnInterface)
+	client = protocol.NewAuthServiceClient(clientConnInterface)
 	e := echo.New()
-	e.GET("/ping_pong/:user", pingPong)
+	e.POST("signIn", signIn)
+	e.POST("signUp", signUp)
+
 	e.Logger.Fatal(e.Start(":8081"))
 }
