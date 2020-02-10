@@ -12,13 +12,12 @@ func (a *Auth) SignUp(c echo.Context) error {
 	if err := c.Bind(user); err != nil {
 		return err
 	}
-
 	requestRegistration := &protocol.SignInRequest{Login: user.Login, Password: user.Password}
 	responseRegistration, err := a.client.SignIn(context.Background(), requestRegistration)
 	if err != nil {
 		return err
 	}
-	token := responseRegistration.GetToken()
+	tokenString := responseRegistration.GetToken()
 
-	return c.JSON(http.StatusOK, &TokenModel{Token: token})
+	return c.JSON(http.StatusOK, &TokenModel{Token: tokenString})
 }

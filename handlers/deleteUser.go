@@ -2,7 +2,6 @@ package handlers
 
 import (
 	"context"
-	"github.com/dgrijalva/jwt-go"
 	"github.com/labstack/echo"
 	"github.com/leshachaplin/grpc-server/protocol"
 	"log"
@@ -15,18 +14,19 @@ func (a *Auth) DeleteUser(c echo.Context) error {
 		// application/xml and application/x-www-form-urlencoded data based on the Content-Type header.
 		return err
 	}
-	// Здесь я должен проверять, есть ли у текущего пользователя права на удаление этого пользователя
-	requestForClaims := &protocol.GetClaimsRequest{Token: c.Request().Header.Get("Authorization")}
-	claims, err := a.client.GetClaims(context.Background(), requestForClaims)
-	claims := token.Claims.(jwt.MapClaims)
-	if claims["admin"] == false {
-		val := 1
-		log.Println(val)
-	}
-	requestToDelete := &protocol.DeleteRequest{Login: user.Login}
-	_, err := a.client.Delete(context.Background(), requestToDelete)
-	if err != nil {
-		log.Fatal(err)
+	// I should check there, if the current user has any rights to delete this user
+	claims := c.Get("claims").(map[string]string)
+
+	if claims["admin"] == "true" {
+		requestToDelete := &protocol.DeleteRequest{Login: user.Login}
+		_, err := a.client.Delete(context.Background(), requestToDelete)
+		// If there are some problems, so user has made a mistake
+		if err != nil {
+			log.Println(err)
+			return echo.ErrBadRequest
+
+		}
+	} else {
 		return echo.ErrUnauthorized
 	}
 	return c.String(http.StatusOK, "")

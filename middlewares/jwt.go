@@ -17,7 +17,9 @@ func NewJWT(client protocol.AuthServiceClient) *JWT {
 func (j *JWT) Middleware(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		token := c.Request().Header.Get("Authorization")
-		_, err := j.client.Validate(context.Background(), &protocol.ValidateToken{Token: token})
+		resp, err := j.client.Validate(context.Background(), &protocol.ValidateToken{Token: token})
+		claims := resp.GetClaims()
+		c.Set("claims", claims)
 		if err != nil {
 			c.String(400, "Unauthorized")
 			return nil

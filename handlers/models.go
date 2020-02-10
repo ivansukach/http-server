@@ -8,3 +8,7 @@ type UserModel struct {
 type TokenModel struct {
 	Token string `json:"token"`
 }
+type ClaimModel struct {
+	Key   string `json:"keyForClaim"`
+	Value string `json:"valueForClaim"`
+}
