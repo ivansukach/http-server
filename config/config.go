@@ -2,18 +2,15 @@ package config
 
 import (
 	"github.com/caarlos0/env"
-	"log"
+	log "github.com/sirupsen/logrus"
 )
 
 type Config struct {
-	Port  int      `env:"PORT" envDefault:"1323"`
-	Hosts []string `env:"HOSTS" envSeparator:":" envDefault:"localhost"`
+	Port             int    `env:"PORT" envDefault:"8081"`
+	AuthGRPCEndpoint string `env:"AuthGRPCEndpoint" envDefault:"localhost:50051"`
 }
 
 func Load() (cfg Config) {
-	//нужна ли эта строка
-	cfg = Config{}
-	//
 	if err := env.Parse(&cfg); err != nil {
 		log.Printf("%+v\n", err)
 	}

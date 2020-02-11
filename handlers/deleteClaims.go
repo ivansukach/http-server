@@ -4,19 +4,20 @@ import (
 	"context"
 	"github.com/labstack/echo"
 	"github.com/leshachaplin/grpc-server/protocol"
+	log "github.com/sirupsen/logrus"
 	"net/http"
 )
 
 func (a *Auth) DeleteClaims(c echo.Context) error {
-	claim := new(ClaimModel)
-	claims := c.Get("claims").(map[string]string)
-	if err := c.Bind(claim); err != nil {
+	log.Info("DeleteClaims")
+	var claims ClaimsModel
+	if err := c.Bind(claims); err != nil {
+		log.Errorf("echo.Context Error DeleteClaims %s", err)
 		return err
 	}
-	delete(claims, claim.Key)
-	requestToDeleteClaim := &protocol.DeleteClaimsRequest{Claims: claims}
-	_, err := a.client.DeleteClaims(context.Background(), requestToDeleteClaim)
+	_, err := a.client.DeleteClaims(context.Background(), &protocol.DeleteClaimsRequest{Claims: claims.Claims})
 	if err != nil {
+		log.Errorf("GRPC Error DeleteClaims %s", err)
 		return err
 	}
 

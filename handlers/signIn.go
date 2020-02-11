@@ -4,21 +4,27 @@ import (
 	"context"
 	"github.com/labstack/echo"
 	"github.com/leshachaplin/grpc-server/protocol"
-	"log"
+	log "github.com/sirupsen/logrus"
 	"net/http"
 )
 
 func (a *Auth) SignIn(c echo.Context) error {
+	log.Info("SignIn")
 	user := new(UserModel)
 
 	if err := c.Bind(user); err != nil { //The default binder supports decoding application/json,
 		// application/xml and application/x-www-form-urlencoded data based on the Content-Type header.
+		log.Errorf("echo.Context Error SignIn %s", err)
 		return err
 	}
-	requestAuth := &protocol.SignInRequest{Login: user.Login, Password: user.Password}
-	responseAuth, err := a.client.SignIn(context.Background(), requestAuth)
+
+	responseAuth, err := a.client.SignIn(context.Background(),
+		&protocol.SignInRequest{
+			Login:    user.Login,
+			Password: user.Password,
+		})
 	if err != nil {
-		log.Println(err)
+		log.Errorf("GRPC Error SignIn %s", err)
 		return echo.ErrUnauthorized
 	}
 	tokenString := responseAuth.GetToken()

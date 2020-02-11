@@ -4,21 +4,21 @@ import (
 	"context"
 	"github.com/labstack/echo"
 	"github.com/leshachaplin/grpc-server/protocol"
+	log "github.com/sirupsen/logrus"
 	"net/http"
 )
 
 func (a *Auth) AddClaims(c echo.Context) error {
-	claim := new(ClaimModel)
-	claims := c.Get("claims").(map[string]string)
-	if err := c.Bind(claim); err != nil {
+	log.Info("AddClaims")
+	var claims ClaimsModel
+	if err := c.Bind(claims); err != nil {
+		log.Errorf("echo.Context Error AddClaims %s", err)
 		return err
 	}
-	claims[claim.Key] = claim.Value
-	requestToAddClaim := &protocol.AddClaimsRequest{Claims: claims}
-	_, err := a.client.AddClaims(context.Background(), requestToAddClaim)
+	_, err := a.client.AddClaims(context.Background(), &protocol.AddClaimsRequest{Claims: claims.Claims})
 	if err != nil {
+		log.Errorf("GRPC Error AddClaims %s", err)
 		return err
 	}
-
 	return c.String(http.StatusOK, "")
 }
