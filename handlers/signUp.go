@@ -10,6 +10,7 @@ import (
 
 func (a *Auth) SignUp(c echo.Context) error {
 	log.Info("SignUp")
+	log.Println("SignUp started")
 	user := new(UserModel)
 	if err := c.Bind(user); err != nil {
 		log.Errorf("echo.Context Error SignUp %s", err)

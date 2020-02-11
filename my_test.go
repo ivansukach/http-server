@@ -1,6 +1,8 @@
 package main
 
 import (
+	"bytes"
+	"encoding/json"
 	"fmt"
 	"github.com/ivansukach/http-server/config"
 	"github.com/ivansukach/http-server/handlers"
@@ -9,10 +11,14 @@ import (
 	"github.com/leshachaplin/grpc-server/protocol"
 	log "github.com/sirupsen/logrus"
 	"google.golang.org/grpc"
+	"io/ioutil"
+	"net/http"
+	"strconv"
 	"testing"
+	"time"
 )
 
-func TestMyrrrr(t *testing.T) {
+func TestSignIn(t *testing.T) {
 	log.Println("Client started")
 	cfg := config.Load()
 
@@ -33,8 +39,30 @@ func TestMyrrrr(t *testing.T) {
 	e.POST("/addClaims", auth.AddClaims, jwt.Middleware)
 	e.POST("/deleteClaims", auth.DeleteClaims, jwt.Middleware)
 	go func() {
-		e.Start(fmt.Sprintf(":%d", cfg.Port))
+		_ = e.Start(fmt.Sprintf(":%d", cfg.Port))
 	}()
 	defer e.Close()
+	log.Printf("Время: %d", time.Now().Unix())
 
+	requestBody, err := json.Marshal(map[string]string{
+		"login":    "ivan" + string(time.Now().Unix()),
+		"password": "qwerty",
+	})
+	if err != nil {
+		log.Error(err)
+	}
+	log.Println("Request has been made")
+	response, err := http.Post("https://localhost:"+strconv.Itoa(cfg.Port)+"/signUp",
+		"application/json",
+		bytes.NewBuffer(requestBody))
+	if err != nil {
+		log.Error(err)
+	}
+	defer response.Body.Close()
+	body, err := ioutil.ReadAll(response.Body) // response.Body - io.Reader???? ReadAll read until
+	//EndOfFile or error.
+	if err != nil {
+		log.Error(err)
+	}
+	log.Println(string(body))
 }
