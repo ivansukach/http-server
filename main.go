@@ -8,13 +8,16 @@ import (
 	"github.com/leshachaplin/grpc-server/protocol"
 	log "github.com/sirupsen/logrus"
 	"google.golang.org/grpc"
+	"strconv"
 )
 
 func main() {
 	log.Println("Клиент запущен ...")
+	cfg := config.Load()
+
 	opts := grpc.WithInsecure() //WithInsecure returns a DialOption which disables transport security for this ClientConn.
 	// Note that transport security is required unless WithInsecure is set.
-	clientConnInterface, err := grpc.Dial(config.Localhost, opts) //attempt to connect to grpc-server
+	clientConnInterface, err := grpc.Dial(cfg.Hosts[0]+strconv.Itoa(cfg.Port), opts) //attempt to connect to grpc-server
 	if err != nil {
 		log.Error(err)
 	}
