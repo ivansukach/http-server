@@ -11,7 +11,7 @@ import (
 func (a *Auth) AddClaims(c echo.Context) error {
 	log.Info("AddClaims")
 	var claims ClaimsModel
-	if err := c.Bind(claims); err != nil {
+	if err := c.Bind(&claims); err != nil {
 		log.Errorf("echo.Context Error AddClaims %s", err)
 		return err
 	}

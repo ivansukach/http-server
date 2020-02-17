@@ -21,7 +21,6 @@ import (
 func TestSignIn(t *testing.T) {
 	log.Println("Client started")
 	cfg := config.Load()
-
 	opts := grpc.WithInsecure() //WithInsecure returns a DialOption which disables transport security for this ClientConn.
 	// Note that transport security is required unless WithInsecure is set.
 	clientConnInterface, err := grpc.Dial(cfg.AuthGRPCEndpoint, opts) //attempt to connect to grpc-server
@@ -29,40 +28,151 @@ func TestSignIn(t *testing.T) {
 		log.Fatal(err)
 	}
 	defer clientConnInterface.Close() //A defer statement defers the execution of a function until the surrounding function returns.
+	timeout := time.Duration(5 * time.Second)
+	clientHTTP := http.Client{Timeout: timeout}
 	client := protocol.NewAuthServiceClient(clientConnInterface)
 	auth := handlers.NewHandler(client)
-	jwt := middlewares.NewJWT(client)
+	jwtM := middlewares.NewJWT(client)
 	e := echo.New()
 	e.POST("/signIn", auth.SignIn)
 	e.POST("/signUp", auth.SignUp)
-	e.POST("/delete", auth.DeleteUser, jwt.Middleware)
-	e.POST("/addClaims", auth.AddClaims, jwt.Middleware)
-	e.POST("/deleteClaims", auth.DeleteClaims, jwt.Middleware)
+	e.POST("/delete", auth.DeleteUser, jwtM.Middleware)
+	e.POST("/addClaims", auth.AddClaims, jwtM.Middleware)
+	e.POST("/deleteClaims", auth.DeleteClaims, jwtM.Middleware)
 	go func() {
 		_ = e.Start(fmt.Sprintf(":%d", cfg.Port))
 	}()
 	defer e.Close()
-	log.Printf("Время: %d", time.Now().Unix())
+	id := time.Now().Unix()
 
+	login := fmt.Sprintf("ivan%d", id)
 	requestBody, err := json.Marshal(map[string]string{
-		"login":    "ivan" + string(time.Now().Unix()),
+		"login":    login,
 		"password": "qwerty",
 	})
 	if err != nil {
 		log.Error(err)
 	}
-	log.Println("Request has been made")
-	response, err := http.Post("https://localhost:"+strconv.Itoa(cfg.Port)+"/signUp",
+	log.Println(string(requestBody))
+	responseSignUp, err := http.Post("http://localhost:"+strconv.Itoa(cfg.Port)+"/signUp",
 		"application/json",
 		bytes.NewBuffer(requestBody))
 	if err != nil {
 		log.Error(err)
 	}
-	defer response.Body.Close()
-	body, err := ioutil.ReadAll(response.Body) // response.Body - io.Reader???? ReadAll read until
+	defer responseSignUp.Body.Close()
+	bodySignUp, err := ioutil.ReadAll(responseSignUp.Body)
 	//EndOfFile or error.
 	if err != nil {
 		log.Error(err)
 	}
-	log.Println(string(body))
+	log.Println(string(bodySignUp))
+
+	//signIn
+	responseSignIn, err := http.Post("http://localhost:"+strconv.Itoa(cfg.Port)+"/signIn",
+		"application/json",
+		bytes.NewBuffer(requestBody))
+	if err != nil {
+		log.Error(err)
+	}
+	defer responseSignIn.Body.Close()
+	bodySignIn, err := ioutil.ReadAll(responseSignIn.Body)
+	//EndOfFile or error.
+	if err != nil {
+		log.Error(err)
+	}
+	log.Println(string(bodySignIn))
+
+	//Delete
+	//I am trying to register a new user
+	id2 := time.Now().Unix()
+	id2 = id2 + 13
+	login2 := fmt.Sprintf("ivan%d", id2)
+	requestBody2, err := json.Marshal(map[string]string{
+		"login":    login2,
+		"password": "qwerty",
+	})
+	if err != nil {
+		log.Error(err)
+	}
+	log.Println(string(requestBody2))
+	responseSignUp2, err := http.Post("http://localhost:"+strconv.Itoa(cfg.Port)+"/signUp",
+		"application/json",
+		bytes.NewBuffer(requestBody2))
+	if err != nil {
+		log.Error(err)
+	}
+	defer responseSignUp2.Body.Close()
+	bodySignUp2, err := ioutil.ReadAll(responseSignUp2.Body)
+	//EndOfFile or error.
+	if err != nil {
+		log.Error(err)
+	}
+	log.Println(string(bodySignUp2))
+
+	//I am trying to adding a new claim to current user
+
+	unmarshalResponse := make(map[string]string)
+	err = json.Unmarshal(bodySignIn, &unmarshalResponse)
+	if err != nil {
+		log.Error(err)
+	}
+
+	fmt.Println("Token for current user: ", unmarshalResponse["token"])
+
+	claimAdmin := new(handlers.ClaimsModel)
+	claimAdmin.Claims = make(map[string]string)
+	claimAdmin.Claims["admin"] = "true"
+
+	//I am trying to add value Claims(type *map[string]string), that associated with key claims in  echo.Context
+	requestAddClaimsBody, err := json.Marshal(map[string]*map[string]string{
+		"claims": &claimAdmin.Claims,
+	})
+
+	//I just have added new claims to current user, so I want to delete disenfranchised user
+	requestAddClaims, err := http.NewRequest("POST", "http://localhost:"+strconv.Itoa(cfg.Port)+"/addClaims",
+		bytes.NewBuffer(requestAddClaimsBody))
+	if err != nil {
+		log.Error(err)
+	}
+	requestAddClaims.Header.Set("Content-Type", "application/json; charset=utf-8")
+	//panic!!
+	requestAddClaims.Header.Set("Authorization", unmarshalResponse["token"])
+	//requestDelete.Header.Set("login", login)
+	responseAddClaims, err := clientHTTP.Do(requestAddClaims)
+	if err != nil {
+		log.Error(err)
+	}
+	defer responseAddClaims.Body.Close()
+	bodyAddClaims, err := ioutil.ReadAll(responseAddClaims.Body)
+	//EndOfFile or error.
+	if err != nil {
+		log.Error(err)
+	}
+	log.Println(string(bodyAddClaims))
+
+	//i have given claims["admin"]="true" to current user and have created the user, which i want to delete
+	requestDeleteBody, err := json.Marshal(map[string]string{
+		"login": login2,
+	})
+	requestDelete, err := http.NewRequest("POST", "http://localhost:"+strconv.Itoa(cfg.Port)+"/delete",
+		bytes.NewBuffer(requestDeleteBody))
+	if err != nil {
+		log.Error(err)
+	}
+	requestDelete.Header.Set("Authorization", unmarshalResponse["token"])
+	responseDelete, err := clientHTTP.Do(requestAddClaims)
+	if err != nil {
+		log.Error(err)
+	}
+	defer responseDelete.Body.Close()
+	bodyDelete, err := ioutil.ReadAll(responseDelete.Body)
+	//EndOfFile or error.
+	if err != nil {
+		log.Error(err)
+	}
+	log.Println(string(bodyDelete))
+
+	//DeleteClaims
+
 }

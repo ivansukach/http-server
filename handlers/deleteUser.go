@@ -11,7 +11,7 @@ import (
 func (a *Auth) DeleteUser(c echo.Context) error {
 	log.Info("DeleteUser")
 	user := new(UserModel)
-	if err := c.Bind(user); err != nil { //The default binder supports decoding application/json,
+	if err := c.Bind(user.Login); err != nil { //The default binder supports decoding application/json,
 		// application/xml and application/x-www-form-urlencoded data based on the Content-Type header.
 		log.Errorf("echo.Context Error DeleteUser %s", err)
 		return err
