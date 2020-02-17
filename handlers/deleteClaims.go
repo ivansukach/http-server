@@ -11,7 +11,7 @@ import (
 func (a *Auth) DeleteClaims(c echo.Context) error {
 	log.Info("DeleteClaims")
 	var claims ClaimsModel
-	if err := c.Bind(claims); err != nil {
+	if err := c.Bind(&claims); err != nil {
 		log.Errorf("echo.Context Error DeleteClaims %s", err)
 		return err
 	}

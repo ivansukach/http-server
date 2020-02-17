@@ -136,9 +136,7 @@ func TestSignIn(t *testing.T) {
 		log.Error(err)
 	}
 	requestAddClaims.Header.Set("Content-Type", "application/json; charset=utf-8")
-	//panic!!
 	requestAddClaims.Header.Set("Authorization", unmarshalResponse["token"])
-	//requestDelete.Header.Set("login", login)
 	responseAddClaims, err := clientHTTP.Do(requestAddClaims)
 	if err != nil {
 		log.Error(err)
@@ -175,4 +173,29 @@ func TestSignIn(t *testing.T) {
 
 	//DeleteClaims
 
+	claimNotAdmin := new(handlers.ClaimsModel)
+	claimNotAdmin.Claims = make(map[string]string)
+	claimNotAdmin.Claims["admin"] = "false"
+	//I am trying to add value Claims(type *map[string]string), that associated with key claims in  echo.Context
+	requestDeleteClaimsBody, err := json.Marshal(map[string]*map[string]string{
+		"claims": &claimNotAdmin.Claims,
+	})
+	requestDeleteClaims, err := http.NewRequest("POST", "http://localhost:"+strconv.Itoa(cfg.Port)+"/deleteClaims",
+		bytes.NewBuffer(requestDeleteClaimsBody))
+	if err != nil {
+		log.Error(err)
+	}
+	requestDeleteClaims.Header.Set("Content-Type", "application/json; charset=utf-8")
+	requestDeleteClaims.Header.Set("Authorization", unmarshalResponse["token"])
+	responseDeleteClaims, err := clientHTTP.Do(requestDeleteClaims)
+	if err != nil {
+		log.Error(err)
+	}
+	defer responseDeleteClaims.Body.Close()
+	bodyDeleteClaims, err := ioutil.ReadAll(responseDeleteClaims.Body)
+	//EndOfFile or error.
+	if err != nil {
+		log.Error(err)
+	}
+	log.Println(string(bodyDeleteClaims))
 }
