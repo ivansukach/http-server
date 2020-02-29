@@ -25,6 +25,7 @@ func main() {
 	auth := handlers.NewHandler(client)
 	jwt := middlewares.NewJWT(client)
 	e := echo.New()
+	e.Static("/", "static")
 	e.POST("/signIn", auth.SignIn)
 	e.POST("/signUp", auth.SignUp)
 	e.POST("/delete", auth.DeleteUser, jwt.Middleware)

@@ -29,5 +29,5 @@ func (a *Auth) SignIn(c echo.Context) error {
 	refreshToken := responseAuth.GetRefreshToken()
 	c.Request().Header.Set("Authorization", accessToken)
 	c.Request().Header.Set("RefreshToken", refreshToken)
-	return c.JSON(http.StatusOK, &TokenModel{AccessToken: accessToken})
+	return c.JSON(http.StatusOK, &TokenModel{AccessToken: accessToken, RefreshToken: refreshToken})
 }

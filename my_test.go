@@ -7,8 +7,8 @@ import (
 	"github.com/ivansukach/http-server/config"
 	"github.com/ivansukach/http-server/handlers"
 	"github.com/ivansukach/http-server/middlewares"
+	"github.com/ivansukach/pokemon-auth/protocol"
 	"github.com/labstack/echo"
-	"github.com/leshachaplin/grpc-server/protocol"
 	log "github.com/sirupsen/logrus"
 	"google.golang.org/grpc"
 	"io/ioutil"
@@ -78,20 +78,24 @@ func TestSignIn(t *testing.T) {
 	}
 	log.Println(string(bodySignUp))
 
-	////SignIn
-	//responseSignIn, err := http.Post("http://localhost:"+strconv.Itoa(cfg.Port)+"/signIn",
-	//	"application/json",
-	//	bytes.NewBuffer(requestBody))
-	//if err != nil {
-	//	log.Error(err)
-	//}
-	//defer responseSignIn.Body.Close()
-	//bodySignIn, err := ioutil.ReadAll(responseSignIn.Body)
-	//if err != nil {
-	//	log.Error(err)
-	//}
-	//log.Println(string(bodySignIn))
-	//
+	//SignIn
+	requestBody2, err := json.Marshal(handlers.UserModel{
+		Login:    login,
+		Password: "qwerty",
+	})
+	responseSignIn, err := http.Post("http://localhost:"+strconv.Itoa(cfg.Port)+"/signIn",
+		"application/json",
+		bytes.NewBuffer(requestBody2))
+	if err != nil {
+		log.Error(err)
+	}
+	defer responseSignIn.Body.Close()
+	bodySignIn, err := ioutil.ReadAll(responseSignIn.Body)
+	if err != nil {
+		log.Error(err)
+	}
+	log.Println(string(bodySignIn))
+
 	////Delete
 	////SignUp
 	//id2 := time.Now().Unix()
