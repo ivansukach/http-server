@@ -1,6 +1,6 @@
 package handlers
 
-import "github.com/leshachaplin/grpc-server/protocol"
+import "github.com/ivansukach/pokemon-auth/protocol"
 
 type Auth struct {
 	client protocol.AuthServiceClient

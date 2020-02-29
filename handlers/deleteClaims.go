@@ -2,8 +2,8 @@ package handlers
 
 import (
 	"context"
+	"github.com/ivansukach/pokemon-auth/protocol"
 	"github.com/labstack/echo"
-	"github.com/leshachaplin/grpc-server/protocol"
 	log "github.com/sirupsen/logrus"
 	"net/http"
 )

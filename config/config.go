@@ -7,7 +7,9 @@ import (
 
 type Config struct {
 	Port             int    `env:"PORT" envDefault:"8081"`
-	AuthGRPCEndpoint string `env:"AuthGRPCEndpoint" envDefault:"localhost:50051"`
+	AuthGRPCEndpoint string `env:"AuthGRPCEndpoint" envDefault:"localhost:1325"`
+	SecretKeyAuth    string `env:"SecretKeyAuth"`
+	SecretKeyRefresh string `env:"SecretKeyRefresh"`
 }
 
 func Load() (cfg Config) {

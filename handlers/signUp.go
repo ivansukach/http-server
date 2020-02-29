@@ -2,8 +2,8 @@ package handlers
 
 import (
 	"context"
+	"github.com/ivansukach/pokemon-auth/protocol"
 	"github.com/labstack/echo"
-	"github.com/leshachaplin/grpc-server/protocol"
 	log "github.com/sirupsen/logrus"
 	"net/http"
 )
@@ -15,14 +15,16 @@ func (a *Auth) SignUp(c echo.Context) error {
 		log.Errorf("echo.Context Error SignUp %s", err)
 		return err
 	}
-	responseRegistration, err := a.client.SignUp(context.Background(), &protocol.SignUpRequest{
+	_, err := a.client.SignUp(context.Background(), &protocol.SignUpRequest{
 		Login:    user.Login,
 		Password: user.Password,
+		Name:     user.Name,
+		Surname:  user.Surname,
+		Coins:    user.Coins,
 	})
 	if err != nil {
 		log.Errorf("GRPC Error SignUp %s", err)
 		return err
 	}
-	token := responseRegistration.GetToken()
-	return c.JSON(http.StatusOK, &TokenModel{Token: token})
+	return c.JSON(http.StatusOK, "")
 }

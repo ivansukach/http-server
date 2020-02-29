@@ -5,8 +5,8 @@ import (
 	"github.com/ivansukach/http-server/config"
 	"github.com/ivansukach/http-server/handlers"
 	"github.com/ivansukach/http-server/middlewares"
+	"github.com/ivansukach/pokemon-auth/protocol"
 	"github.com/labstack/echo"
-	"github.com/leshachaplin/grpc-server/protocol"
 	log "github.com/sirupsen/logrus"
 	"google.golang.org/grpc"
 )
@@ -14,14 +14,13 @@ import (
 func main() {
 	log.Println("Client started")
 	cfg := config.Load()
-
 	opts := grpc.WithInsecure() //WithInsecure returns a DialOption which disables transport security for this ClientConn.
 	// Note that transport security is required unless WithInsecure is set.
-	clientConnInterface, err := grpc.Dial(cfg.AuthGRPCEndpoint, opts) //attempt to connect to grpc-server
+	clientConnInterface, err := grpc.Dial(cfg.AuthGRPCEndpoint, opts)
 	if err != nil {
 		log.Fatal(err)
 	}
-	defer clientConnInterface.Close() //A defer statement defers the execution of a function until the surrounding function returns.
+	defer clientConnInterface.Close()
 	client := protocol.NewAuthServiceClient(clientConnInterface)
 	auth := handlers.NewHandler(client)
 	jwt := middlewares.NewJWT(client)
