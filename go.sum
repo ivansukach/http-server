@@ -24,8 +24,10 @@ github.com/golang/protobuf v1.3.4/go.mod h1:vzj43D7+SQXF/4pzW/hwtAqwc6iTitCiVSaW
 github.com/google/go-cmp v0.2.0 h1:+dTQ8DZQJz0Mb/HjFlkptS1FeQ4cWSnN941F8aEG4SQ=
 github.com/google/go-cmp v0.2.0/go.mod h1:oXzfMopK8JAjlY9xF4vHSVASa0yLyX7SntLO5aqRK0M=
 github.com/google/uuid v1.1.1/go.mod h1:TIyPZe4MgqvfeYDBFedMoGGpEw/LqOeaOT+nhxU+yHo=
-github.com/ivansukach/pokemon-auth v0.0.0-20200229183041-a11f6d42810f h1:0OhRwVZiPrZDUjTPK0ciKkLLhfOUX2vVakPmgJiIrdo=
-github.com/ivansukach/pokemon-auth v0.0.0-20200229183041-a11f6d42810f/go.mod h1:WRqvHv775Ppiero9RD1XvEtdjQFUujPMbxjgKGtt++0=
+github.com/ivansukach/pokemon v0.0.0-20200228175528-fbcd392f21c8 h1:meVZUDOJR2kiieSVMPGccPaku5UvXg5gY6QI0JFeY1I=
+github.com/ivansukach/pokemon v0.0.0-20200228175528-fbcd392f21c8/go.mod h1:Ko2sbH/Gi5Nk+9KNBsbXa5nAa55f6m2donJ+pdDZPXM=
+github.com/ivansukach/pokemon-auth v0.0.0-20200304153939-b858d41a42ce h1:OPwjC4idqZeQcbblnthJ2VSthTbyjcd3AHndJJvn4rg=
+github.com/ivansukach/pokemon-auth v0.0.0-20200304153939-b858d41a42ce/go.mod h1:WRqvHv775Ppiero9RD1XvEtdjQFUujPMbxjgKGtt++0=
 github.com/jmoiron/sqlx v1.2.0/go.mod h1:1FEQNm3xlJgrMD+FBdI9+xvCksHtbpVBBw5dYhBSsks=
 github.com/konsorten/go-windows-terminal-sequences v1.0.1 h1:mweAR1A6xJ3oS2pRaGiHgQ4OO8tzTaLawm8vnODuwDk=
 github.com/konsorten/go-windows-terminal-sequences v1.0.1/go.mod h1:T0+1ngSBFLxvqU3pZ+m/2kptfBszLMUkC4ZK/EgS/cQ=

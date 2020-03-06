@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/ivansukach/http-server/config"
-	"github.com/ivansukach/http-server/handlers"
+	auth2 "github.com/ivansukach/http-server/handlers/auth"
 	"github.com/ivansukach/http-server/middlewares"
 	"github.com/ivansukach/pokemon-auth/protocol"
 	"github.com/labstack/echo"
@@ -27,10 +27,10 @@ func TestSignIn(t *testing.T) {
 		log.Fatal(err)
 	}
 	defer clientConnInterface.Close()
-	//timeout := time.Duration(500 * time.Second)
-	//clientHTTP := http.Client{Timeout: timeout}
+	timeout := time.Duration(500 * time.Second)
+	clientHTTP := http.Client{Timeout: timeout}
 	client := protocol.NewAuthServiceClient(clientConnInterface)
-	auth := handlers.NewHandler(client)
+	auth := auth2.NewHandler(client)
 	jwtM := middlewares.NewJWT(client)
 	e := echo.New()
 	e.POST("/signIn", auth.SignIn)
@@ -53,7 +53,7 @@ func TestSignIn(t *testing.T) {
 	//	"surname": "surname",
 	//	"coins": "10000",
 	//})
-	requestBody, err := json.Marshal(handlers.UserModel{
+	requestBody, err := json.Marshal(auth2.UserModel{
 		Login:    login,
 		Password: "qwerty",
 		Name:     "ivan",
@@ -79,7 +79,7 @@ func TestSignIn(t *testing.T) {
 	log.Println(string(bodySignUp))
 
 	//SignIn
-	requestBody2, err := json.Marshal(handlers.UserModel{
+	requestBody2, err := json.Marshal(auth2.UserModel{
 		Login:    login,
 		Password: "qwerty",
 	})
@@ -95,6 +95,32 @@ func TestSignIn(t *testing.T) {
 		log.Error(err)
 	}
 	log.Println(string(bodySignIn))
+
+	//Restricted
+	unmarshalResponse := make(map[string]string)
+	err = json.Unmarshal(bodySignIn, &unmarshalResponse)
+	requestRestricted, err := http.NewRequest("GET", "http://localhost:"+strconv.Itoa(cfg.Port)+"/restricted/main.html",
+		bytes.NewBuffer(requestBody))
+	if err != nil {
+		log.Error(err)
+	}
+	requestRestricted.Header.Set("Content-Type", "application/json; charset=utf-8")
+	requestRestricted.Header.Set("Authorization", unmarshalResponse["Authorization"])
+	requestRestricted.Header.Set("Location", "http://localhost:"+strconv.Itoa(cfg.Port))
+	requestRestricted.Header.Set("RefreshToken", unmarshalResponse["RefreshToken"])
+	requestRestricted.Header.Set("login", login)
+	responseRestricted, err := clientHTTP.Do(requestRestricted)
+	if err != nil {
+		log.Error(err)
+	}
+	defer responseRestricted.Body.Close()
+	bodyRestricted, err := ioutil.ReadAll(responseRestricted.Body)
+	if err != nil {
+		log.Error(err)
+	}
+	log.Println(string(bodyRestricted))
+	//I just have added new claims to current user, so I want to delete disenfranchised user
+	//i have given claims["admin"]="true" to current user and have created the user, which i want to delete
 
 	////Delete
 	////SignUp
@@ -134,21 +160,21 @@ func TestSignIn(t *testing.T) {
 	//requestAddClaimsBody, err := json.Marshal(map[string]*map[string]string{
 	//	"claims": &claimAdmin.Claims,
 	//})
-	//requestAddClaims, err := http.NewRequest("POST", "http://localhost:"+strconv.Itoa(cfg.Port)+"/addClaims",
+	//requestRestricted, err := http.NewRequest("POST", "http://localhost:"+strconv.Itoa(cfg.Port)+"/addClaims",
 	//	bytes.NewBuffer(requestAddClaimsBody))
 	//if err != nil {
 	//	log.Error(err)
 	//}
-	//requestAddClaims.Header.Set("Content-Type", "application/json; charset=utf-8")
-	//requestAddClaims.Header.Set("Authorization", unmarshalResponse["Authorization"])
-	//requestAddClaims.Header.Set("RefreshToken", unmarshalResponse["RefreshToken"])
-	//requestAddClaims.Header.Set("login", login)
-	//responseAddClaims, err := clientHTTP.Do(requestAddClaims)
+	//requestRestricted.Header.Set("Content-Type", "application/json; charset=utf-8")
+	//requestRestricted.Header.Set("Authorization", unmarshalResponse["Authorization"])
+	//requestRestricted.Header.Set("RefreshToken", unmarshalResponse["RefreshToken"])
+	//requestRestricted.Header.Set("login", login)
+	//responseRestricted, err := clientHTTP.Do(requestRestricted)
 	//if err != nil {
 	//	log.Error(err)
 	//}
-	//defer responseAddClaims.Body.Close()
-	//bodyAddClaims, err := ioutil.ReadAll(responseAddClaims.Body)
+	//defer responseRestricted.Body.Close()
+	//bodyAddClaims, err := ioutil.ReadAll(responseRestricted.Body)
 	//if err != nil {
 	//	log.Error(err)
 	//}
