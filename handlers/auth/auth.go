@@ -18,17 +18,13 @@ func NewHandler(cfg *config.Config, e *echo.Echo) *Auth {
 	if err != nil {
 		log.Fatal(err)
 	}
-	defer clientConnInterface.Close()
 	client := protocol.NewAuthServiceClient(clientConnInterface)
 	jwt := middlewares.NewJWT(client)
 	auth := &Auth{client: client}
 	e.POST("/signIn", auth.SignIn)
 	e.POST("/signUp", auth.SignUp)
-	e.GET("/test", auth.SignUp, jwt.Middleware)
 	e.POST("/delete", auth.DeleteUser, jwt.Middleware)
 	e.POST("/addClaims", auth.AddClaims, jwt.Middleware)
 	e.POST("/deleteClaims", auth.DeleteClaims, jwt.Middleware)
-	r := e.Group("/restricted")
-	r.Use(jwt.Middleware)
 	return auth
 }

@@ -61,6 +61,7 @@ func (j *JWT) Middleware(next echo.HandlerFunc) echo.HandlerFunc {
 			c.Request().Header.Set("Authorization", accessToken)
 			c.Request().Header.Set("RefreshToken", refreshToken)
 		}
+
 		c.Set("claims", &claims)
 		//err:=c.Redirect(301, "http://localhost:8081")
 		//if err!=nil{

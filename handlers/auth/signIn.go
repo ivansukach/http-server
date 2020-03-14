@@ -41,6 +41,7 @@ func (a *Auth) SignIn(c echo.Context) error {
 	//c.Request().Header.Set("Surname", surname)
 	//c.Request().Header.Set("Coins", fmt.Sprintf("%d",coins))
 	//c.Request().Header.Set("Photo", photo)
+
 	return c.JSON(http.StatusOK, &SignInResponse{AccessToken: accessToken, RefreshToken: refreshToken, Login: login,
 		Name: name, Surname: surname, Coins: coins, Photo: photo})
 }
