@@ -1,6 +1,11 @@
-export const FILL_ALL_REGISTRATION_FIELDS = 'FILL_ALL_REGISTRATION_FIELDS';
+export const CHANGE_LOGIN = 'CHANGE_LOGIN';
+export const CHANGE_PASSWORD = 'CHANGE_PASSWORD';
 
-export const setRegisteredUser = (    name, surname, login) =>({
-    type: FILL_ALL_REGISTRATION_FIELDS,
-    payload: { name: name, surname: surname, login: login}
+export const setLogin = login =>({
+    type: CHANGE_LOGIN,
+    payload: login
+});
+export const setPassword = password =>({
+    type: CHANGE_PASSWORD,
+    payload: password
 });

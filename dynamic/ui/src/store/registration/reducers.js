@@ -1,4 +1,5 @@
-import {FILL_ALL_REGISTRATION_FIELDS} from "./actions";
+import {CHANGE_LOGIN} from "./actions";
+import {CHANGE_PASSWORD} from "./actions";
 
 const defaultRegistrationState = {
     name: '',
@@ -7,8 +8,10 @@ const defaultRegistrationState = {
 };
 export const registrationReducer = (state = defaultRegistrationState, action) => {
     switch (action.type){
-        case FILL_ALL_REGISTRATION_FIELDS:
-            return action.payload
+        case CHANGE_LOGIN:
+            return {...state, login: action.payload};
+        case CHANGE_PASSWORD:
+            return {...state, password: action.payload};
         default:
 
     }
