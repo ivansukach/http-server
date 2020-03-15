@@ -22,7 +22,7 @@ import {
 import Registration from "./components/Registration";
 
 const sagaMiddleware = createSagaMiddleware();
-const store = createStore(combineReducers, applyMiddleware(logger, sagaMiddleware));
+export const store = createStore(combineReducers, applyMiddleware(logger, sagaMiddleware));
 
 
 export default class App extends React.Component {
@@ -40,6 +40,9 @@ export default class App extends React.Component {
                     </Route>
                     <Route exact path="/signUp">
                         <RegistrationContainer />
+                    </Route>
+                    <Route exact path="/connected">
+                        <Connected />
                     </Route>
                     {/*<PrivateRoute path="/protected">*/}
                     {/*    <ProtectedPage />*/}

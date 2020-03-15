@@ -1,4 +1,4 @@
-export const FILL_ALL_FIELDS_OF_CURRENT_USER = 'FILL_ALL_FIELDS_OF_CURRENT_USER';
+export const SEND_AUTH_DATA = 'SEND_AUTH_DATA';
 export const PUT_DATA = 'PUT_DATA';
 export const LOAD_DATA = 'LOAD_DATA';
 
@@ -15,7 +15,8 @@ export const loadData = () => {
     };
 };
 
-export const setCurrentUser = login =>({
-    type: FILL_ALL_FIELDS_OF_CURRENT_USER,
-    payload: login
+
+export const setCurrentUser = (login, password)=>({
+    type: SEND_AUTH_DATA,
+    payload: {login: login, password: password}
 });
