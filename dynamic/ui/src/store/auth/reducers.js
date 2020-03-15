@@ -11,7 +11,6 @@ const defaultUserState = {
     refreshToken: ''
 };
 export const authReducer = (state = defaultUserState, action) => {
-    console.log(state);
     switch (action.type){
         case FILL_ALL_FIELDS_OF_CURRENT_USER:
             return { ...state, login: action.payload};

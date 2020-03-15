@@ -7,6 +7,7 @@ const defaultRegistrationState = {
     login: ''
 };
 export const registrationReducer = (state = defaultRegistrationState, action) => {
+    console.log(state);
     switch (action.type){
         case CHANGE_LOGIN:
             return {...state, login: action.payload};

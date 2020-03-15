@@ -7,8 +7,9 @@ export default class Auth extends React.Component {
         this.onPasswordChange = this.onPasswordChange.bind(this);
     }
     onLoginChange(event){
-        console.log("event.target.value");
-        console.log(event.target.value);
+        console.log("event.target", event.target);
+        console.log("event.target", event.target);
+        console.log("event.target.value: ", event.target.login.value);
         this.props.setLogin(event.target.value);
         setTimeout(() => console.log("this.props.login: ", this.props.login), 1000)
     }
@@ -24,10 +25,10 @@ export default class Auth extends React.Component {
                     <hr/>
 
                     <label htmlFor="login"><b>Login</b></label>
-                    <input type="text" placeholder="Enter Login" name="login" value={this.props.login} onChange={this.onLoginChange} required/>
+                    <input type="text" placeholder="Enter Login" name="login" required/>
 
                     <label htmlFor="password"><b>Password</b></label>
-                    <input type="password" placeholder="Enter Password" name="password" value={this.props.password} onChange={this.onPasswordChange} required/>
+                    <input type="password" placeholder="Enter Password" name="password" required/>
 
                     <label htmlFor="name"><b>Name</b></label>
                     <input type="text" placeholder="Enter Name" name="name" required/>
@@ -37,7 +38,7 @@ export default class Auth extends React.Component {
                     <hr/>
                     <p>By creating an account you agree to our <a href="#">Terms & Privacy</a>.</p>
 
-                    <button type="submit" className="registerbtn">Register</button>
+                    <button type="submit" className="registerbtn" onClick={this.onLoginChange}>Register</button>
                 </div>
 
                 <div className="container signin">
