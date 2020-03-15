@@ -25,7 +25,7 @@ export default class Auth extends React.Component {
                     <hr/>
 
                     <label htmlFor="login"><b>Login</b></label>
-                    <input type="text" placeholder="Enter Login" name="login" required/>
+                    <input type="text" placeholder="Enter Login" name="login" onChange={this.onLoginChange} required/>
 
                     <label htmlFor="password"><b>Password</b></label>
                     <input type="password" placeholder="Enter Password" name="password" required/>
@@ -38,7 +38,7 @@ export default class Auth extends React.Component {
                     <hr/>
                     <p>By creating an account you agree to our <a href="#">Terms & Privacy</a>.</p>
 
-                    <button type="submit" className="registerbtn" onClick={this.onLoginChange}>Register</button>
+                    <button type="submit" className="registerbtn">Register</button>
                 </div>
 
                 <div className="container signin">
