@@ -10,9 +10,20 @@ import RegistrationContainer from "./components/RegistrationContainer";
 import {Connected} from "./components/Connected";
 // import reducer from "./store/reducers"
 import {watchLoadData} from "./store/sagas";
+import {
+    BrowserRouter as Router,
+    Switch,
+    Route,
+    Link,
+    Redirect,
+    useHistory,
+    useLocation
+} from "react-router-dom";
+import Registration from "./components/Registration";
 
 const sagaMiddleware = createSagaMiddleware();
 const store = createStore(combineReducers, applyMiddleware(logger, sagaMiddleware));
+
 
 export default class App extends React.Component {
     constructor(props) {
@@ -22,9 +33,22 @@ export default class App extends React.Component {
   render() {
     return (
         <Provider store={store}>
-            {/*<AuthContainer />*/}
+            <Router>
+                <Switch>
+                    <Route exact path="/">
+                        <AuthContainer />
+                    </Route>
+                    <Route exact path="/signUp">
+                        <RegistrationContainer />
+                    </Route>
+                    {/*<PrivateRoute path="/protected">*/}
+                    {/*    <ProtectedPage />*/}
+                    {/*</PrivateRoute>*/}
+                </Switch>
+            </Router>
+
             {/*<RegistrationContainer />*/}
-            <Connected />
+            {/*<Connected />*/}
         </Provider>
     );
   }

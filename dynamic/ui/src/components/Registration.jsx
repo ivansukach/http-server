@@ -1,5 +1,15 @@
 import React from 'react';
-export default class Auth extends React.Component {
+import {
+    BrowserRouter as Router,
+    Switch,
+    Route,
+    Link,
+    Redirect,
+    useHistory,
+    useLocation
+} from "react-router-dom";
+
+export default class Registration extends React.Component {
 
     constructor(props) {
         super(props);
@@ -42,7 +52,7 @@ export default class Auth extends React.Component {
                 </div>
 
                 <div className="container signin">
-                    <p>Already have an account? <a href="/">Sign in</a>.</p>
+                    <p>Already have an account? <Link to="/">Sign in</Link></p>
                 </div>
             </form>
 
