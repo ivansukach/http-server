@@ -1,6 +1,4 @@
-import {SEND_AUTH_DATA, PUT_DATA, loadData, UNAUTHENTICATED} from "./actions";
-import {useDispatch} from "react-redux";
-import {useHistory} from "react-router";
+import {SEND_AUTH_DATA, PUT_DATA, UNAUTHENTICATED} from "./actions";
 
 export const defaultUserState = {
     name: '',

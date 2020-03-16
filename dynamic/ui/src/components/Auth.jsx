@@ -11,7 +11,7 @@ export default class Auth extends React.Component {
         console.log("password: ", password);
         this.props.setCurrentUser(login, password);
         this.props.loadData();
-        this.setState({ redirect: "/main" });
+        setTimeout(() => {this.setState({redirect: "/main"})}, 100);
     }
 
 
