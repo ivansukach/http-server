@@ -1,12 +1,8 @@
 import {CHANGE_LOGIN} from "./actions";
 import {CHANGE_PASSWORD} from "./actions";
+import {defaultUserState} from "../auth/reducers";
 
-const defaultRegistrationState = {
-    name: '',
-    surname: '',
-    login: ''
-};
-export const registrationReducer = (state = defaultRegistrationState, action) => {
+export const registrationReducer = (state = defaultUserState, action) => {
     // console.log(state);
     switch (action.type){
         case CHANGE_LOGIN:

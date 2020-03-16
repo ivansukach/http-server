@@ -20,6 +20,7 @@ import {
     useLocation
 } from "react-router-dom";
 import Registration from "./components/Registration";
+import Main from "./components/Main";
 
 const sagaMiddleware = createSagaMiddleware();
 export const store = createStore(combineReducers, applyMiddleware(logger, sagaMiddleware));
@@ -44,9 +45,9 @@ export default class App extends React.Component {
                     <Route exact path="/connected">
                         <Connected />
                     </Route>
-                    {/*<PrivateRoute path="/protected">*/}
-                    {/*    <ProtectedPage />*/}
-                    {/*</PrivateRoute>*/}
+                    <PrivateRoute path="/main">
+                        <Main />
+                    </PrivateRoute>
                 </Switch>
             </Router>
 
@@ -56,4 +57,12 @@ export default class App extends React.Component {
     );
   }
 }
+function PrivateRoute({ children, ...rest }) {
+    return (
+        <Route
+            {...rest}
+            render={props=>{(store.getState().auth.isAuthenticated === true) ? console.log("authenticated") : console.log("unauthenticated")}}
 
+        />
+    );
+}

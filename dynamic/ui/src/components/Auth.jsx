@@ -1,26 +1,33 @@
 import React from 'react';
-import {Link} from "react-router-dom";
+import {Link, Redirect } from "react-router-dom";
 
 
 export default class Auth extends React.Component {
-    onSubmit() {
+    onSubmit(e) {
+        e.preventDefault();
         const login = document.getElementById('login').value;
         const password = document.getElementById('password').value;
         console.log("login: ", login);
         console.log("password: ", password);
         this.props.setCurrentUser(login, password);
         this.props.loadData();
+        this.setState({ redirect: "/main" });
     }
 
 
     constructor(props) {
         super(props);
         this.onSubmit = this.onSubmit.bind(this);
-
+        this.state = {
+            redirect: null
+        }
     }
 
 
     render() {
+        if (this.state.redirect) {
+            return <Redirect to={this.state.redirect} />
+        }
         return (
 
             <form id="SignIn">
@@ -34,9 +41,9 @@ export default class Auth extends React.Component {
                     <label htmlFor="password"><b>Password</b></label>
                     <input type="password" id="password" placeholder="Enter Password" name="password"
                            defaultValue={this.props.password} required/>
-                    <Link to="/main">
+                    {/*<Link to="/main">*/}
                         <button type="submit" className="registerbtn" onClick={this.onSubmit}> Login</button>
-                    </Link>
+                    {/*</Link>*/}
                 </div>
                 <div className="container signin">
                     <p>Create an account? <Link to="/signUp">Sign Up</Link></p>

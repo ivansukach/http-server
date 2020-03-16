@@ -1,6 +1,7 @@
 export const SEND_AUTH_DATA = 'SEND_AUTH_DATA';
 export const PUT_DATA = 'PUT_DATA';
 export const LOAD_DATA = 'LOAD_DATA';
+export const UNAUTHENTICATED ='UNAUTHENTICATED';
 
 export const putData = (dataFromServer) => {
     return {
@@ -12,6 +13,12 @@ export const putData = (dataFromServer) => {
 export const loadData = () => {
     return {
         type: LOAD_DATA
+    };
+};
+
+export const unauthenticated = () => {
+    return {
+        type: UNAUTHENTICATED
     };
 };
 

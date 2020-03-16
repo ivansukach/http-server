@@ -6,7 +6,7 @@ import Auth from './Auth';
 class AuthContainer extends React.Component {
     render() {
         return <Auth login={this.props.login} password={this.props.password} setCurrentUser={this.props.setCurrentUser}
-        loadData={this.props.loadData}/>;
+        loadData={this.props.loadData} />;
     }
 }
 
