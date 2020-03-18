@@ -1,41 +1,27 @@
 package main
 
 import (
-	"context"
-	"github.com/ivansukach/http-server/protocol"
+	"fmt"
+	"github.com/ivansukach/http-server/config"
+	"github.com/ivansukach/http-server/handlers/auth"
+	"github.com/ivansukach/http-server/handlers/game"
 	"github.com/labstack/echo"
-	"google.golang.org/grpc"
-	"log"
+	"github.com/labstack/echo/middleware"
+	log "github.com/sirupsen/logrus"
+	"net/http"
 )
 
-var client protocol.GetResponseClient
-
-func pingPong(c echo.Context) error {
-	user := c.Param("user")
-	log.Println(user)
-	request := &protocol.GRRequest{Req: "Ping"}
-
-	response, err := client.GiveResponse(context.Background(), request) // Package context in Golang allows you to send data in your program in some «context».
-	// Package context allows us to exchange data and includes anything you need to provide this
-	if err != nil {
-		log.Fatal(err)
-	}
-	log.Println("Ответ сервера:", "Let's play "+response.GetRes()+", "+user)
-	str := "Let's play " + response.GetRes() + ", " + user
-	c.Response().Writer.Write([]byte(str))
-	return nil
-}
 func main() {
-	log.Println("Клиент запущен ...")
-	opts := grpc.WithInsecure() //WithInsecure returns a DialOption which disables transport security for this ClientConn.
-	// Note that transport security is required unless WithInsecure is set.
-	clientConnInterface, err := grpc.Dial("localhost:1323", opts) //attempt to connect to grpc-server
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer clientConnInterface.Close() //A defer statement defers the execution of a function until the surrounding function returns.
-	client = protocol.NewGetResponseClient(clientConnInterface)
+	log.Println("Client started")
+	cfg := config.Load()
+
 	e := echo.New()
-	e.GET("/ping_pong/:user", pingPong)
-	e.Logger.Fatal(e.Start(":8081"))
+	e.Static("/", "static")
+	auth.NewHandler(&cfg, e)
+	game.NewHandler(&cfg, e)
+	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
+		AllowOrigins: []string{"http://localhost:8080", "http://localhost:8081"},
+		AllowMethods: []string{http.MethodGet, http.MethodPut, http.MethodPost, http.MethodDelete},
+	}))
+	e.Logger.Fatal(e.Start(fmt.Sprintf(":%d", cfg.Port)))
 }

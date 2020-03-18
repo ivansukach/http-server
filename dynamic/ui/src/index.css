@@ -1,0 +1,200 @@
+html{
+    height: 100%;
+    overflow:  hidden;
+}
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: black;
+    min-height: 100vh;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+/* Add padding to containers */
+.container {
+    padding: 16px;
+    background-color: white;
+}
+
+/* Full-width input fields */
+input{
+    width: 100%;
+    padding: 15px;
+    margin: 5px 0 22px 0;
+    display: inline-block;
+    border: none;
+    background: #f1f1f1;
+}
+
+input[type=text]:focus, input[type=password]:focus {
+    background-color: #ddd;
+    outline: none;
+}
+
+/* Overwrite default styles of hr */
+hr {
+    border: 1px solid #f1f1f1;
+    margin-bottom: 25px;
+}
+
+/* Set a style for the submit button */
+.registerbtn {
+    background-color: #4CAF50;
+    color: white;
+    padding: 16px 20px;
+    margin: 8px 0;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+    opacity: 0.9;
+}
+
+.registerbtn:hover {
+    opacity: 1;
+}
+
+/* Add a blue text color to links */
+a {
+    color: dodgerblue;
+}
+
+/* Set a grey background color and center the text of the "sign in" section */
+.signin {
+    background-color: #f1f1f1;
+    text-align: center;
+}
+#bgSound{
+    padding-right: 10vw;
+}
+#authorized_user{
+    width:100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height:8%;
+    position:fixed;
+    top:0;
+    background: rgba(0, 0, 0, 0.3);
+    z-index: 2000;
+}
+#authorized_user > .flex-item {
+    flex: auto;
+}
+#username{
+    color: blanchedalmond;
+    margin:1%;
+}
+.userMenuElements{
+    margin:1%;
+}
+#events{
+    margin:1% 10% 1% 1%;
+}
+#userPhoto{
+    height: 100%;
+    border-radius:15%;
+}
+#linkToChangePhoto{
+    height: 100%;
+    display: flex;
+}
+#start {
+    display: block;
+    padding: 10px 30px;
+    margin: 10px auto;
+    position: relative;
+    overflow: hidden;
+    border: 2px solid #fe6637;
+    border-radius: 8px;
+    font-family: 'd_Charger', fantasy;
+    font-size: 30px;
+    color: #fe6637;
+    transition: .2s ease-in-out;
+}
+
+#start:before {
+    content: "";
+    background: linear-gradient(90deg, rgba(255, 255, 255, .1), rgba(255, 255, 255, .5));
+    height: 50px;
+    width: 50px;
+    position: absolute;
+    top: -8px;
+    left: -75px;
+    transform: skewX(-45deg);
+}
+
+#start:hover {
+    background: #fe6637;
+    color: #fff;
+}
+
+#start:hover:before {
+    left: 80%;
+    transition: .5s ease-in-out;
+}
+#prompt{
+    height: 150px;
+    width: 100%;
+    font-family: 'BancoDi', fantasy;
+    font-size: 60px;
+    text-align: center;
+    color: rosybrown;
+    padding: 80px 0px 0px 0px;
+}
+#slideShow{
+    position: relative;
+    height: 25vw;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.controls {
+    background: #333;
+    color: #fff;
+    border: none;
+    padding: 20px;
+    font-size: 20px;
+    cursor: pointer;
+    border: 2px solid #fff;
+    margin: 10px;
+    width: 70px;
+    z-index: 1;
+}
+
+.controls:hover,
+.controls:focus {
+    background: #eee;
+    color: #333;
+}
+#slides {
+    position: relative;
+    height: 25vw;
+    margin: 0 auto;
+    list-style-type: none;
+}
+.slide {
+    position: absolute;
+    height: 100%;
+    width: 20vw;
+    left: 0px;
+    top: 0px;
+    opacity: 0;
+    z-index: 0;
+    transition: opacity 1s;
+}
+
+.showing {
+    position: relative;
+    opacity: 1;
+    z-index: 1;
+}
+@font-face {
+    font-family: BancoDi; /* Имя шрифта */
+    src: url(./components/fonts/BancoDi.ttf); /* Путь к файлу со шрифтом */
+}
+@font-face {
+    font-family: d_Charger; /* Имя шрифта */
+    src: url(./components/fonts/d_Charger.otf); /* Путь к файлу со шрифтом */
+}
