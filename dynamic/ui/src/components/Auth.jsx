@@ -17,6 +17,8 @@ export default class Auth extends React.Component {
     constructor(props) {
         super(props);
         this.onSubmit = this.onSubmit.bind(this);
+        this.onLoginChange = this.onLoginChange.bind(this);
+        this.onPasswordChange = this.onPasswordChange.bind(this);
         this.state = {
             redirect: null
         }
