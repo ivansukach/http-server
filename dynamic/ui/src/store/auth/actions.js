@@ -1,4 +1,6 @@
-export const SEND_AUTH_DATA = 'SEND_AUTH_DATA';
+export const SET_LOGIN = 'SET_LOGIN';
+export const SET_PASSWORD = 'SET_PASSWORD';
+// export const SEND_AUTH_DATA = 'SEND_AUTH_DATA';
 export const PUT_DATA = 'PUT_DATA';
 export const LOAD_DATA = 'LOAD_DATA';
 export const UNAUTHENTICATED ='UNAUTHENTICATED';
@@ -23,7 +25,15 @@ export const unauthenticated = () => {
 };
 
 
-export const setCurrentUser = (login, password)=>({
-    type: SEND_AUTH_DATA,
-    payload: {login: login, password: password}
+// export const setCurrentUser = (login, password)=>({
+//     type: SEND_AUTH_DATA,
+//     payload: {login: login, password: password}
+// });
+export const setLogin = (login)=>({
+    type: SET_LOGIN,
+    payload: login
+});
+export const setPassword = (password)=>({
+    type: SET_PASSWORD,
+    payload: password
 });

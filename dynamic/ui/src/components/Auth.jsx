@@ -5,16 +5,15 @@ import {Link, Redirect } from "react-router-dom";
 export default class Auth extends React.Component {
     onSubmit(e) {
         e.preventDefault();
-        const login = document.getElementById('login').value;
-        const password = document.getElementById('password').value;
-        console.log("login: ", login);
-        console.log("password: ", password);
-        this.props.setCurrentUser(login, password);
         this.props.loadData();
         setTimeout(() => {this.setState({redirect: "/main"})}, 100);
     }
-
-
+    onLoginChange(event){
+        this.props.setLogin(event.target.value);
+    }
+    onPasswordChange(event){
+        this.props.setPassword(event.target.value);
+    }
     constructor(props) {
         super(props);
         this.onSubmit = this.onSubmit.bind(this);
@@ -36,14 +35,12 @@ export default class Auth extends React.Component {
                     <p>Please fill in this form to Login.</p>
                     <hr/>
                     <label htmlFor="Login"><b>Login</b></label>
-                    <input type="text" id="login" placeholder="Enter Login" name="login" defaultValue={this.props.login}
-                           required/>
+                    <input type="text" id="login" placeholder="Enter Login" name="login" value={this.props.login}
+                           onChange={this.onLoginChange} required/>
                     <label htmlFor="password"><b>Password</b></label>
                     <input type="password" id="password" placeholder="Enter Password" name="password"
-                           defaultValue={this.props.password} required/>
-                    {/*<Link to="/main">*/}
+                           value={this.props.password} onChange={this.onPasswordChange} required/>
                         <button type="submit" className="registerbtn" onClick={this.onSubmit}> Login</button>
-                    {/*</Link>*/}
                 </div>
                 <div className="container signin">
                     <p>Create an account? <Link to="/signUp">Sign Up</Link></p>

@@ -15,7 +15,16 @@ const bodyStyle = {
 };
 
 export default class Main extends React.Component {
-    MainScript() {
+    startGame(e){
+        e.preventDefault();
+        //There I should get number of slide
+    }
+
+    constructor(props) {
+        super(props);
+        this.startGame=this.startGame.bind(this)
+    }
+    componentDidMount(){
         let slides = document.querySelectorAll('#slides .slide');
         let currentSlide = 0;
         let slideInterval = setInterval(nextSlide, 4000);
@@ -52,16 +61,6 @@ export default class Main extends React.Component {
             previousSlide();
         };
     }
-    startGame(e){
-        e.preventDefault();
-        //There I should get number of slide
-    }
-
-    constructor(props) {
-        super(props);
-        this.MainScript=this.MainScript.bind(this);
-        this.startGame=this.startGame.bind(this)
-    }
 
 
     render() {
@@ -69,7 +68,7 @@ export default class Main extends React.Component {
         document.body.style.backgroundSize = "cover";
         // document.onLoad=this.MainScript;
         return (
-            <div onLoad={this.MainScript}>
+            <div>
                 <div id="authorized_user">
                     <audio id="bgSound" src={audio} autoPlay loop controls/>
                     <Link to="/profile" className="userMenuElements">My Profile</Link>

@@ -1,20 +1,20 @@
-let currentUser = localStorage.getItem("activeUser");
-let activeUser = JSON.parse(currentUser);
-let emptyUser = {
-    name: '',
-    surname: '',
-    avatar: '',
-    coins: 0,
-    accessToken: '',
-    refreshToken:''
-};
-function saveToJSON(){
-    let currentUser = JSON.stringify(activeUser);
-    localStorage.setItem("activeUser", currentUser);
-}
-document.onload = () => {
-
-}
+// let currentUser = localStorage.getItem("activeUser");
+// let activeUser = JSON.parse(currentUser);
+// let emptyUser = {
+//     name: '',
+//     surname: '',
+//     avatar: '',
+//     coins: 0,
+//     accessToken: '',
+//     refreshToken:''
+// };
+// function saveToJSON(){
+//     let currentUser = JSON.stringify(activeUser);
+//     localStorage.setItem("activeUser", currentUser);
+// }
+// document.onload = () => {
+//
+// }
 
 // function setCurrentUserFields(){
 //

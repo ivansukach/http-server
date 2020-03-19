@@ -10,6 +10,7 @@ import {Connected} from "./components/Connected";
 import {watchLoadData} from "./store/sagas";
 import {BrowserRouter as Router, Route, Switch, Redirect} from "react-router-dom";
 import Main from "./components/Main";
+import MainContainer from "./components/MainContainer";
 
 const sagaMiddleware = createSagaMiddleware();
 export const store = createStore(combineReducers, applyMiddleware(logger, sagaMiddleware));
@@ -36,7 +37,7 @@ export default class App extends React.Component {
                             <Connected/>
                         </Route>
                         <PrivateRoute path="/main">
-                            <Main/>
+                            <MainContainer/>
                         </PrivateRoute>
                     </Switch>
                 </Router>
