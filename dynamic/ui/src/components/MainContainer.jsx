@@ -1,12 +1,12 @@
 import React from 'react';
 import {connect} from 'react-redux';
-import {loadData} from "../store/auth/actions";
+import {nextSlide, previousSlide, pauseSlideShow, loadSlideShow} from "../store/main/actions";
 import Main from './Main';
 
 class MainContainer extends React.Component {
     render() {
-        return <Main login={this.props.login} password={this.props.password}
-                     loadData={this.props.loadData}/>;
+        return <Main loadSlideShow={this.props.loadSlideShow} nextSlide={this.props.nextSlide}
+                     previousSlide={this.props.previousSlide} pauseSlideShow={this.props.pauseSlideShow}/>;
     }
 }
 
@@ -25,7 +25,7 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = {
-    loadData
+    loadSlideShow, nextSlide, previousSlide, pauseSlideShow
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(MainContainer);

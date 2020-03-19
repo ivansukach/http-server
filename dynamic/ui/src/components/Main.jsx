@@ -8,23 +8,35 @@ import pokemon from './img/pokemons/giphy.gif';
 import {Link} from "react-router-dom";
 import Background from './img/bg.jpg';
 
-const bodyStyle = {
-    background: "url('./img/bg.jpg') no-repeat",
-    backgroundSize: "cover",
-    minHeight: "100%"
-};
 
 export default class Main extends React.Component {
     startGame(e){
         e.preventDefault();
         //There I should get number of slide
     }
+    onPreviousSlideBtnClick(){
+        this.props.previousSlide();
+    }
+    onNextSlideBtnClick(){
+        this.props.nextSlide();
+    }
+    onLoadSlideShow(){
+        this.props.loadSlideShow(this.state.slides);
+    }
 
     constructor(props) {
         super(props);
-        this.startGame=this.startGame.bind(this)
+        this.startGame=this.startGame.bind(this);
+        this.onLoadSlideShow=this.onLoadSlideShow.bind(this);
+        this.onPreviousSlideBtnClick=this.onPreviousSlideBtnClick.bind(this);
+        this.onNextSlideBtnClick=this.onNextSlideBtnClick.bind(this);
+        this.state={
+            slides: document.querySelectorAll('#slides .slide'),
+            slideIntervalTimeout: 4000
+        }
     }
     componentDidMount(){
+        this.onLoadSlideShow();
         let slides = document.querySelectorAll('#slides .slide');
         let currentSlide = 0;
         let slideInterval = setInterval(nextSlide, 4000);
@@ -81,7 +93,7 @@ export default class Main extends React.Component {
                 </div>
                 <div id="prompt">CHOOSE POKEMON</div>
                 <div id="slideShow">
-                    <button className="controls" id="previous">&lt;</button>
+                    <button className="controls" id="previous" onClick={this.onPreviousSlideBtnClick}>&lt;</button>
                     <ul id="slides">
                         <li className="slide showing">
                             <img src={pikachu} width="100%" height="100%"/>
@@ -93,7 +105,7 @@ export default class Main extends React.Component {
                             <img src={pokemon} width="100%" height="100%"/>
                         </li>
                     </ul>
-                    <button className="controls" id="next">&gt;</button>
+                    <button className="controls" id="next" onClick={this.onNextSlideBtnClick}>&gt;</button>
                 </div>
                 <button id="start" onClick={this.startGame}>START</button>
                 {/*    <script src="../js/users.js"></script>*/}
