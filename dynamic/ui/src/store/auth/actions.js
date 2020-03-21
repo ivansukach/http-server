@@ -1,39 +1,38 @@
-export const SET_LOGIN = 'SET_LOGIN';
-export const SET_PASSWORD = 'SET_PASSWORD';
-// export const SEND_AUTH_DATA = 'SEND_AUTH_DATA';
-export const PUT_DATA = 'PUT_DATA';
-export const LOAD_DATA = 'LOAD_DATA';
-export const UNAUTHENTICATED ='UNAUTHENTICATED';
+export const SET_LOGIN_SIGN_IN = 'SET_LOGIN_SIGN_IN';
+export const SET_PASSWORD_SIGN_IN = 'SET_PASSWORD_SIGN_IN';
+export const PUT_DATA_SIGN_IN = 'PUT_DATA_SIGN_IN';
+export const LOAD_DATA_SIGN_IN = 'LOAD_DATA_SIGN_IN';
+export const UNAUTHENTICATED_SIGN_IN ='UNAUTHENTICATED_SIGN_IN';
+export const REDIRECT_TO_MAIN_PAGE = 'REDIRECT_TO_MAIN_PAGE';
 
-export const putData = (dataFromServer) => {
+export const putDataFromServer = (dataFromServer) => {
     return {
-        type: PUT_DATA,
+        type: PUT_DATA_SIGN_IN,
         payload: dataFromServer
     };
 };
 
-export const loadData = () => {
+export const loadDataToRequest = (login, password) => {
     return {
-        type: LOAD_DATA
+        type: LOAD_DATA_SIGN_IN,
+        payload: {login: login, password: password}
     };
 };
 
 export const unauthenticated = () => {
     return {
-        type: UNAUTHENTICATED
+        type: UNAUTHENTICATED_SIGN_IN
     };
 };
 
-
-// export const setCurrentUser = (login, password)=>({
-//     type: SEND_AUTH_DATA,
-//     payload: {login: login, password: password}
-// });
-export const setLogin = (login)=>({
-    type: SET_LOGIN,
+export const setLoginSignIn = (login)=>({
+    type: SET_LOGIN_SIGN_IN,
     payload: login
 });
-export const setPassword = (password)=>({
-    type: SET_PASSWORD,
+export const setPasswordSignIn = (password)=>({
+    type: SET_PASSWORD_SIGN_IN,
     payload: password
+});
+export const redirectToMainPage = () =>({
+    type: REDIRECT_TO_MAIN_PAGE
 });

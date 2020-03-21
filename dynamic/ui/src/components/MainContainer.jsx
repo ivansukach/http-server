@@ -1,12 +1,13 @@
 import React from 'react';
 import {connect} from 'react-redux';
-import {nextSlide, previousSlide, pauseSlideShow, loadSlideShow} from "../store/main/actions";
+import {nextSlide, previousSlide, changeSlide, pauseSlideShow, loadSlideShow} from "../store/main/actions";
 import Main from './Main';
 
 class MainContainer extends React.Component {
     render() {
         return <Main loadSlideShow={this.props.loadSlideShow} nextSlide={this.props.nextSlide}
-                     previousSlide={this.props.previousSlide} pauseSlideShow={this.props.pauseSlideShow}/>;
+                     previousSlide={this.props.previousSlide} pauseSlideShow={this.props.pauseSlideShow}
+        changeSlide={this.props.changeSlide}/>;
     }
 }
 
@@ -25,7 +26,7 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = {
-    loadSlideShow, nextSlide, previousSlide, pauseSlideShow
+    loadSlideShow, nextSlide, previousSlide, pauseSlideShow, changeSlide
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(MainContainer);

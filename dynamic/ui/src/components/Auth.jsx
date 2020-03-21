@@ -5,29 +5,24 @@ import {Link, Redirect } from "react-router-dom";
 export default class Auth extends React.Component {
     onSubmit(e) {
         e.preventDefault();
-        this.props.loadData();
-        setTimeout(() => {this.setState({redirect: "/main"})}, 100);
+        this.props.loadDataToRequest(this.props.login, this.props.password);
     }
     onLoginChange(event){
-        this.props.setLogin(event.target.value);
+        this.props.setLoginSignIn(event.target.value);
     }
     onPasswordChange(event){
-        this.props.setPassword(event.target.value);
+        this.props.setPasswordSignIn(event.target.value);
     }
     constructor(props) {
         super(props);
         this.onSubmit = this.onSubmit.bind(this);
         this.onLoginChange = this.onLoginChange.bind(this);
         this.onPasswordChange = this.onPasswordChange.bind(this);
-        this.state = {
-            redirect: null
-        }
     }
 
-
     render() {
-        if (this.state.redirect) {
-            return <Redirect to={this.state.redirect} />
+        if (this.props.redirect) {
+            return <Redirect to={this.props.redirect} />
         }
         return (
 

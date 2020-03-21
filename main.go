@@ -20,7 +20,7 @@ func main() {
 	auth.NewHandler(&cfg, e)
 	game.NewHandler(&cfg, e)
 	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
-		AllowOrigins: []string{"http://localhost:8080", "http://localhost:8081"},
+		AllowOrigins: []string{"http://localhost:3000", "http://localhost:8081"},
 		AllowMethods: []string{http.MethodGet, http.MethodPut, http.MethodPost, http.MethodDelete},
 	}))
 	e.Logger.Fatal(e.Start(fmt.Sprintf(":%d", cfg.Port)))

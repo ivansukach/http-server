@@ -1,12 +1,12 @@
 import React from 'react';
 import {connect} from 'react-redux';
-import {loadData, setLogin, setPassword} from "../store/auth/actions";
+import {loadDataToRequest, setLoginSignIn, setPasswordSignIn} from "../store/auth/actions";
 import Auth from './Auth';
 
 class AuthContainer extends React.Component {
     render() {
-        return <Auth login={this.props.login} password={this.props.password}
-        loadData={this.props.loadData} setLogin={this.props.setLogin} setPassword={this.props.setPassword} />;
+        return <Auth login={this.props.login} password={this.props.password} redirect={this.props.redirect}
+        loadDataToRequest={this.props.loadDataToRequest} setLoginSignIn={this.props.setLoginSignIn} setPasswordSignIn={this.props.setPasswordSignIn} />;
     }
 }
 
@@ -19,13 +19,13 @@ const mapStateToProps = state => {
         photo: state.auth.photo,
         coins: state.auth.coins,
         accessToken: state.auth.accessToken,
-        refreshToken: state.auth.refreshToken
-
+        refreshToken: state.auth.refreshToken,
+        redirect: state.auth.redirect
     };
 };
 
 const mapDispatchToProps = {
-    loadData, setLogin, setPassword
+    loadDataToRequest, setLoginSignIn, setPasswordSignIn
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(AuthContainer);

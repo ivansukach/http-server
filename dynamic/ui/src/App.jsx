@@ -7,7 +7,7 @@ import logger from 'redux-logger';
 import AuthContainer from "./components/AuthContainer";
 import RegistrationContainer from "./components/RegistrationContainer";
 import {Connected} from "./components/Connected";
-import {watchLoadData} from "./store/sagas";
+import {watchLoadSignInData, watchLoadSignUpData} from "./store/sagas";
 import {BrowserRouter as Router, Route, Switch, Redirect} from "react-router-dom";
 import Main from "./components/Main";
 import MainContainer from "./components/MainContainer";
@@ -19,7 +19,8 @@ export const store = createStore(combineReducers, applyMiddleware(logger, sagaMi
 export default class App extends React.Component {
     constructor(props) {
         super(props);
-        sagaMiddleware.run(watchLoadData);
+        sagaMiddleware.run(watchLoadSignInData);
+        sagaMiddleware.run(watchLoadSignUpData);
     }
 
     render() {
@@ -42,16 +43,13 @@ export default class App extends React.Component {
                     </Switch>
                 </Router>
 
-                {/*<RegistrationContainer />*/}
-                {/*<Connected />*/}
             </Provider>
         );
     }
 }
 
 function PrivateRoute({children, ...rest}) {
-    // setTimeout(
-    //     () => {
+
             return (
                 <Route
                     {...rest}
@@ -66,7 +64,6 @@ function PrivateRoute({children, ...rest}) {
                     }
                 />
             );
-        // }
-        // , 100)
+
 }
 

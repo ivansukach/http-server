@@ -1,5 +1,12 @@
 import { takeEvery, put, call } from 'redux-saga/effects';
-import {LOAD_DATA, putData, unauthenticated} from "./auth/actions";
+import {
+    LOAD_DATA_SIGN_IN,
+    putDataFromServer,
+    loadDataToRequest,
+    unauthenticated,
+    redirectToMainPage
+} from "./auth/actions";
+import {SEND_DATA_SIGN_UP} from "./registration/actions";
 import {LOAD_SLIDE_SHOW, changeSlide} from "./main/actions";
 import {store} from "../App"
 function fetchSignInData() {
@@ -11,35 +18,46 @@ function fetchSignInData() {
         }})
         .then(response => response.json());
 }
-function* workerLoadData() {
-    console.log('it is working');
+function fetchSignUpData() {
+    const latestState = store.getState();
+    console.log("latestState: ", latestState);
+    return fetch('http://localhost:8081/signUp',{method: 'POST', body: JSON.stringify(latestState.registration),
+        headers: {
+            'Content-Type': 'application/json'
+        }})
+        .then(response => response.json());
+}
+function* workerLoadSignInData() {
+    console.log('workerLoadSignInData is working');
     const data = yield call(fetchSignInData);
     console.log("dataFromServer: ", data);
     if(data.message==="Unauthorized"){
         yield put(unauthenticated());
     }else{
-        yield put(putData(data));
+        yield put(putDataFromServer(data));
+        yield put(redirectToMainPage())
     }
 
 }
 
-export function* watchLoadData() {
+export function* watchLoadSignInData() {
     console.log("Data should be loaded");
-    yield takeEvery(LOAD_DATA, workerLoadData)
+    yield takeEvery(LOAD_DATA_SIGN_IN, workerLoadSignInData)
 }
-
-function* workerLoadSlideShow() {
-    console.log('slide show should be started soon');
-    let index = 0;
-    for( ;store.getState.main.status; ){
-        setTimeout(yield put(changeSlide(++index)), 4000);
+function* workerLoadSignUpData() {
+    console.log('workerLoadSignUpData is working');
+    const data = yield call(fetchSignUpData);
+    console.log("dataFromServer: ", data);
+    if(data.message==="Unauthorized"){
+        yield put(unauthenticated());
+    } else{
+        const latestState = store.getState();
+        yield put(loadDataToRequest(latestState.registration.login, latestState.registration.password));
     }
 
-
-
 }
 
-export function* watchLoadSlideShow() {
-    console.log("Slide show should be loaded");
-    yield takeEvery(LOAD_SLIDE_SHOW, workerLoadSlideShow)
+export function* watchLoadSignUpData() {
+    console.log("Data should be loaded");
+    yield takeEvery(SEND_DATA_SIGN_UP, workerLoadSignUpData)
 }

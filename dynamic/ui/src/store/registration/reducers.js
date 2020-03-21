@@ -1,14 +1,30 @@
-import {CHANGE_LOGIN} from "./actions";
-import {CHANGE_PASSWORD} from "./actions";
-import {defaultUserState} from "../auth/reducers";
+import {
+    CHANGE_LOGIN_SIGN_UP,
+    CHANGE_PASSWORD_SIGN_UP,
+    CHANGE_NAME_SIGN_UP,
+    CHANGE_SURNAME_SIGN_UP,
+    SEND_DATA_SIGN_UP
+} from "./actions";
+export const defaultRegistrationState = {
+    name: '',
+    surname: '',
+    login: '',
+    password: '',
+    redirect: null
+};
 
-export const registrationReducer = (state = defaultUserState, action) => {
-    // console.log(state);
+export const registrationReducer = (state = defaultRegistrationState, action) => {
     switch (action.type){
-        case CHANGE_LOGIN:
+        case CHANGE_LOGIN_SIGN_UP:
             return {...state, login: action.payload};
-        case CHANGE_PASSWORD:
+        case CHANGE_PASSWORD_SIGN_UP:
             return {...state, password: action.payload};
+        case CHANGE_NAME_SIGN_UP:
+            return {...state, name: action.payload};
+        case CHANGE_SURNAME_SIGN_UP:
+            return {...state, surname: action.payload};
+        case SEND_DATA_SIGN_UP:
+            return {...state,login: action.payload.login, password: action.payload.password, name: action.payload.name, surname: action.payload.surname};
         default:
 
     }
