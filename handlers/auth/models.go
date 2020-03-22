@@ -1,10 +1,10 @@
 package auth
 
 type UserModel struct {
-	Login    string `json:"login"`
-	Password string `json:"password"`
-	Name     string `json:"name"`
-	Surname  string `json:"surname"`
+	Login    string `json:"login" validate:"required, len>6, len<20"`
+	Password string `json:"password" validate:"required, len>6, len<20"`
+	Name     string `json:"name" validate:"required, len>1, len<20"`
+	Surname  string `json:"surname" validate:"required, len>1, len<40"`
 	Coins    int32  `json:"coins"`
 }
 
