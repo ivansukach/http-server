@@ -14,7 +14,7 @@ func (a *Auth) SignIn(c echo.Context) error {
 
 	if err := c.Bind(user); err != nil {
 		log.Errorf("echo.Context Error SignIn %s", err)
-		return err
+		return echo.NewHTTPError(http.StatusBadRequest, err)
 	}
 	responseAuth, err := a.client.SignIn(context.Background(),
 		&protocol.SignInRequest{
@@ -23,7 +23,7 @@ func (a *Auth) SignIn(c echo.Context) error {
 		})
 	if err != nil {
 		log.Errorf("GRPC Error SignIn %s", err)
-		return echo.ErrUnauthorized
+		return echo.NewHTTPError(http.StatusUnauthorized, err)
 	}
 	accessToken := responseAuth.GetToken()
 	refreshToken := responseAuth.GetRefreshToken()
@@ -32,15 +32,6 @@ func (a *Auth) SignIn(c echo.Context) error {
 	coins := responseAuth.GetCoins()
 	photo := responseAuth.GetPhoto()
 	login := responseAuth.GetLogin()
-
-	//c.Request().Header.Set("Authorization", accessToken)
-	//c.Request().Header.Set("RefreshToken", refreshToken)//Fool code. I set tokens in Body Response
-	//
-	//
-	//c.Request().Header.Set("Name", name)
-	//c.Request().Header.Set("Surname", surname)
-	//c.Request().Header.Set("Coins", fmt.Sprintf("%d",coins))
-	//c.Request().Header.Set("Photo", photo)
 
 	return c.JSON(http.StatusOK, &SignInResponse{AccessToken: accessToken, RefreshToken: refreshToken, Login: login,
 		Name: name, Surname: surname, Coins: coins, Photo: photo})

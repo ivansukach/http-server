@@ -7,6 +7,7 @@ export default class Registration extends React.Component {
         super(props);
         this.onLoginChange = this.onLoginChange.bind(this);
         this.onPasswordChange = this.onPasswordChange.bind(this);
+        this.onRepeatPasswordChange = this.onRepeatPasswordChange.bind(this);
         this.onNameChange = this.onNameChange.bind(this);
         this.onSurnameChange = this.onSurnameChange.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
@@ -17,6 +18,9 @@ export default class Registration extends React.Component {
     onPasswordChange(event){
         this.props.setPasswordSignUp(event.target.value);
     }
+    onRepeatPasswordChange(event){
+        this.props.setRepeatPasswordSignUp(event.target.value);
+    }
     onNameChange(event){
         this.props.setNameSignUp(event.target.value);
     }
@@ -25,7 +29,8 @@ export default class Registration extends React.Component {
     }
     onSubmit(e){
         e.preventDefault();
-        this.props.sendDataToServer(this.props.login, this.props.password, this.props.name, this.props.surname);
+        this.props.sendDataToServer(this.props.login, this.props.password, this.props.repeatPassword,
+            this.props.name, this.props.surname);
     }
 
     render() {
@@ -44,6 +49,9 @@ export default class Registration extends React.Component {
 
                     <label htmlFor="password"><b>Password</b></label>
                     <input type="password" placeholder="Enter Password" name="password" value={this.props.password} onChange={this.onPasswordChange} required/>
+
+                    <label htmlFor="repeatPassword"><b>Repeat password</b></label>
+                    <input type="password" placeholder="Repeat Password" name="repeatPassword" value={this.props.repeatPassword} onChange={this.onRepeatPasswordChange} required/>
 
                     <label htmlFor="name"><b>Name</b></label>
                     <input type="text" placeholder="Enter Name" name="name" value={this.props.name} onChange={this.onNameChange} required/>

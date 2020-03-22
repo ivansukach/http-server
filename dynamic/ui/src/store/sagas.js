@@ -19,9 +19,12 @@ function fetchSignInData() {
         .then(response => response.json());
 }
 function fetchSignUpData() {
-    const latestState = store.getState();
-    console.log("latestState: ", latestState);
-    return fetch('http://localhost:8081/signUp',{method: 'POST', body: JSON.stringify(latestState.registration),
+    const latestStateReg = store.getState().registration;
+    console.log("latestState: ", latestStateReg);
+    if(latestStateReg.password!==latestStateReg.repeatPassword){
+        return {message: "your passwords are different"}
+    }
+    return fetch('http://localhost:8081/signUp',{method: 'POST', body: JSON.stringify(latestStateReg),
         headers: {
             'Content-Type': 'application/json'
         }})
@@ -33,7 +36,7 @@ function* workerLoadSignInData() {
     console.log("dataFromServer: ", data);
     if(data.message==="Unauthorized"){
         yield put(unauthenticated());
-    }else{
+    } else{
         yield put(putDataFromServer(data));
         yield put(redirectToMainPage())
     }
@@ -48,11 +51,12 @@ function* workerLoadSignUpData() {
     console.log('workerLoadSignUpData is working');
     const data = yield call(fetchSignUpData);
     console.log("dataFromServer: ", data);
-    if(data.message==="Unauthorized"){
-        yield put(unauthenticated());
-    } else{
+    if(data.status===200){
         const latestState = store.getState();
         yield put(loadDataToRequest(latestState.registration.login, latestState.registration.password));
+    }else{
+        alert(data.message);
+        yield put(unauthenticated());
     }
 
 }
