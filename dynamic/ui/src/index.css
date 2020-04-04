@@ -4,7 +4,7 @@ html{
 }
 body {
     font-family: Arial, Helvetica, sans-serif;
-    background-color: black;
+    background-color: white;
     min-height: 100vh;
 }
 
@@ -138,9 +138,9 @@ a {
     height: 150px;
     width: 100%;
     font-family: 'BancoDi', fantasy;
-    font-size: 60px;
+    font-size: 6vw;
     text-align: center;
-    color: rosybrown;
+    color: plum;
     padding: 80px 0px 0px 0px;
 }
 #slideShow{

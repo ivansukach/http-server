@@ -1,5 +1,3 @@
-export const SET_LOGIN_SIGN_IN = 'SET_LOGIN_SIGN_IN';
-export const SET_PASSWORD_SIGN_IN = 'SET_PASSWORD_SIGN_IN';
 export const PUT_DATA_SIGN_IN = 'PUT_DATA_SIGN_IN';
 export const LOAD_DATA_SIGN_IN = 'LOAD_DATA_SIGN_IN';
 export const UNAUTHENTICATED_SIGN_IN ='UNAUTHENTICATED_SIGN_IN';
@@ -12,10 +10,10 @@ export const putDataFromServer = (dataFromServer) => {
     };
 };
 
-export const loadDataToRequest = (login, password) => {
+export const loadDataToRequest = (formData, ws) => {
     return {
         type: LOAD_DATA_SIGN_IN,
-        payload: {login: login, password: password}
+        payload: {formData, ws}
     };
 };
 
@@ -25,14 +23,6 @@ export const unauthenticated = () => {
     };
 };
 
-export const setLoginSignIn = (login)=>({
-    type: SET_LOGIN_SIGN_IN,
-    payload: login
-});
-export const setPasswordSignIn = (password)=>({
-    type: SET_PASSWORD_SIGN_IN,
-    payload: password
-});
 export const redirectToMainPage = () =>({
     type: REDIRECT_TO_MAIN_PAGE
 });

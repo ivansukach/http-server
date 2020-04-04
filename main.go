@@ -14,6 +14,7 @@ import (
 func main() {
 	log.Println("Client started")
 	cfg := config.Load()
+	//origin := "http://localhost/"
 
 	e := echo.New()
 	e.Static("/", "static")
@@ -23,5 +24,6 @@ func main() {
 		AllowOrigins: []string{"http://localhost:3000", "http://localhost:8081"},
 		AllowMethods: []string{http.MethodGet, http.MethodPut, http.MethodPost, http.MethodDelete},
 	}))
+	e.Use(middleware.Logger())
 	e.Logger.Fatal(e.Start(fmt.Sprintf(":%d", cfg.Port)))
 }

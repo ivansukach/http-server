@@ -11,7 +11,7 @@ export const defaultRegistrationState = {
     login: '',
     password: '',
     repeatPassword: '',
-    redirect: null
+    ws: undefined
 };
 
 export const registrationReducer = (state = defaultRegistrationState, action) => {
@@ -27,8 +27,9 @@ export const registrationReducer = (state = defaultRegistrationState, action) =>
         case CHANGE_SURNAME_SIGN_UP:
             return {...state, surname: action.payload};
         case SEND_DATA_SIGN_UP:
-            return {...state,login: action.payload.login, password: action.payload.password,
-                repeatPassword: action.payload.repeatPassword, name: action.payload.name, surname: action.payload.surname};
+            return {...state,login: action.payload.formData.login, password: action.payload.formData.password,
+                repeatPassword: action.payload.formData.repeatPassword, name: action.payload.formData.name,
+                surname: action.payload.formData.surname, ws: action.payload.ws};
         default:
 
     }

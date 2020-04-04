@@ -32,3 +32,9 @@ type SignInResponse struct { // I want to rework that c.JSON(http.StatusOk, Stru
 	Coins        int32  `json:"Coins"`
 	Photo        string `json:"Photo"`
 }
+type EmptyResponse struct {
+}
+type Type struct {
+	Type    string `json:"type"`
+	Content string `json:"content"`
+}

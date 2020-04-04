@@ -1,4 +1,4 @@
-import {LOAD_DATA_SIGN_IN, PUT_DATA_SIGN_IN, SET_LOGIN_SIGN_IN, SET_PASSWORD_SIGN_IN, UNAUTHENTICATED_SIGN_IN,
+import {LOAD_DATA_SIGN_IN, PUT_DATA_SIGN_IN, UNAUTHENTICATED_SIGN_IN,
     REDIRECT_TO_MAIN_PAGE} from "./actions";
 import {} from "../registration/actions";
 
@@ -12,20 +12,17 @@ export const defaultUserState = {
     accessToken: '',
     refreshToken: '',
     isAuthenticated: false,
-    redirect: null
+    rememberMe: false,
+    redirect: undefined,
+    ws: undefined
 };
 
 export const authReducer = (state = defaultUserState, action) => {
 
     switch (action.type){
-        // case SEND_AUTH_DATA:
-        //     return { ...state, login: action.payload.login, password: action.payload.password};
-        case SET_LOGIN_SIGN_IN:
-            return {...state, login: action.payload};
-        case SET_PASSWORD_SIGN_IN:
-            return {...state, password: action.payload};
         case LOAD_DATA_SIGN_IN:
-            return {...state, login: action.payload.login, password: action.payload.password};
+            return {...state, login: action.payload.formData.login, password: action.payload.formData.password,
+                rememberMe: action.payload.formData.rememberMe, ws: action.payload.ws};
         case PUT_DATA_SIGN_IN:
             return { ...state, name: action.payload.name, surname: action.payload.surname, photo: action.payload.photo,
             accessToken: action.payload.accessToken, refreshToken: action.payload.refreshToken, isAuthenticated: true};
