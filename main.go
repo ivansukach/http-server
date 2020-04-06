@@ -12,12 +12,10 @@ import (
 )
 
 func main() {
-	log.Println("Client started")
+	log.Info("Client started")
 	cfg := config.Load()
-	//origin := "http://localhost/"
-
 	e := echo.New()
-	e.Static("/", "static")
+	e.Static("/", "react-http-server/static-content")
 	auth.NewHandler(&cfg, e)
 	game.NewHandler(&cfg, e)
 	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{

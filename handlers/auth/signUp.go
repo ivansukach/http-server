@@ -6,9 +6,7 @@ import (
 	"fmt"
 	"github.com/go-playground/validator/v10"
 	"github.com/ivansukach/pokemon-auth/protocol"
-	"github.com/labstack/echo"
 	log "github.com/sirupsen/logrus"
-	"net/http"
 )
 
 func (a *Auth) SignUp(data string) string {
@@ -23,14 +21,11 @@ func (a *Auth) SignUp(data string) string {
 			errInfo += fmt.Sprintf("Incorrect data in field: %s \n", err.Field())
 		}
 		log.Info("Есть ошибка: ", errInfo)
-		content, err := json.Marshal(echo.NewHTTPError(http.StatusBadRequest, errInfo))
+		typeError := Type{Type: "error"}
+		typeError.Content = errInfo
+		message, err := json.Marshal(typeError)
 		if err != nil {
-			return err.Error()
-		}
-		typeAuth.Content = string(content)
-		message, err := json.Marshal(typeAuth)
-		if err != nil {
-			return err.Error()
+			log.Fatal(err)
 		}
 		return string(message)
 	}
@@ -41,20 +36,17 @@ func (a *Auth) SignUp(data string) string {
 		Surname:  user.Surname,
 	})
 	if err != nil {
-		content, err := json.Marshal(echo.NewHTTPError(http.StatusBadRequest, err))
+		typeError := Type{Type: "error"}
+		typeError.Content = "Incorrect data. You are not registered "
+		message, err := json.Marshal(typeError)
 		if err != nil {
-			return err.Error()
-		}
-		typeAuth.Content = string(content)
-		message, err := json.Marshal(typeAuth)
-		if err != nil {
-			return err.Error()
+			log.Fatal(err)
 		}
 		return string(message)
 	}
 	message, err := json.Marshal(typeAuth)
 	if err != nil {
-		return err.Error()
+		log.Fatal(err)
 	}
 	return string(message)
 }

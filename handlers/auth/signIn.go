@@ -5,9 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/ivansukach/pokemon-auth/protocol"
-	"github.com/labstack/echo"
 	log "github.com/sirupsen/logrus"
-	"net/http"
 )
 
 func (a *Auth) SignIn(data string) string {
@@ -16,14 +14,11 @@ func (a *Auth) SignIn(data string) string {
 	typeAuth := Type{Type: "auth"}
 	err := json.Unmarshal([]byte(data), user)
 	if err != nil {
-		content, err := json.Marshal(echo.NewHTTPError(http.StatusBadRequest, err))
+		typeError := Type{Type: "error"}
+		typeError.Content = "Error! Bad Request"
+		message, err := json.Marshal(typeError)
 		if err != nil {
-			return err.Error()
-		}
-		typeAuth.Content = string(content)
-		message, err := json.Marshal(typeAuth)
-		if err != nil {
-			return err.Error()
+			log.Fatal(err)
 		}
 		return string(message)
 	}
@@ -34,14 +29,11 @@ func (a *Auth) SignIn(data string) string {
 			Password: user.Password,
 		})
 	if err != nil {
-		content, err := json.Marshal(echo.NewHTTPError(http.StatusUnauthorized, err))
+		typeError := Type{Type: "error"}
+		typeError.Content = "Incorrect data. You are not authorized "
+		message, err := json.Marshal(typeError)
 		if err != nil {
-			return err.Error()
-		}
-		typeAuth.Content = string(content)
-		message, err := json.Marshal(typeAuth)
-		if err != nil {
-			return err.Error()
+			log.Fatal(err)
 		}
 		return string(message)
 	}
@@ -55,21 +47,18 @@ func (a *Auth) SignIn(data string) string {
 	content, err := json.Marshal(SignInResponse{AccessToken: accessToken, RefreshToken: refreshToken, Login: login,
 		Name: name, Surname: surname, Coins: coins, Photo: photo})
 	if err != nil {
-		content, err := json.Marshal(echo.NewHTTPError(http.StatusInternalServerError, err))
+		typeError := Type{Type: "error"}
+		typeError.Content = "Internal Server Error "
+		message, err := json.Marshal(typeError)
 		if err != nil {
-			return err.Error()
-		}
-		typeAuth.Content = string(content)
-		message, err := json.Marshal(typeAuth)
-		if err != nil {
-			return err.Error()
+			log.Fatal(err)
 		}
 		return string(message)
 	}
 	typeAuth.Content = string(content)
 	message, err := json.Marshal(typeAuth)
 	if err != nil {
-		return err.Error()
+		log.Fatal(err)
 	}
 	log.Println("message:", string(message))
 	return string(message)

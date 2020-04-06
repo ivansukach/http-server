@@ -13,6 +13,7 @@ FROM alpine:latest
 WORKDIR /app
 
 COPY --from=httpserver /app/http-server .
+COPY ./react-http-server ./react-http-server
 
 EXPOSE 8081
 

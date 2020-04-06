@@ -43,7 +43,6 @@ func (a *Auth) WS(c echo.Context) error {
 				websocket.Message.Send(ws, message)
 			default:
 				log.Println("Default")
-
 			}
 		}
 	}).ServeHTTP(c.Response(), c.Request())

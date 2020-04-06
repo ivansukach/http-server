@@ -1,0 +1,3 @@
+[submodule "react-http-server"]
+	path = react-http-server
+	url = https://github.com/ivansukach/react-http-server
